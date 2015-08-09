@@ -10,14 +10,19 @@ MAX=1000
 mkdir -p logs
 
 # Find all notes to dump
+# FIXME: We must check if ratelimit is hit here!
 geeknote find --count $MAX
 
 START=1
 END=$MAX
 for ((i=$START; i<=$END; i++)); do
-    echo "Beginning to dump note number \#$i..."   # ...with date $date
+    echo "Beginning to dump note number #$i..."   # ...with date $date
     file=logs/$i.md    # Replace index with date and timestamp, or at the very least date
     geeknote show $i > $file
+    sleep_duration=$(cat $file | egrep "Rate Limit Hit: Please wait [0-9]* seconds before continuing" | egrep -o --color=never "[0-9]*")
+    # TODO: Decrement $i here to retry after waiting! Or extract inner contents of loop as function and simply call again after waiting.
+    echo "Rate limit reached, waiting $sleep_duration seconds as promised..."
+    sleep $sleep_duration
     echo "Dumped note with filename $file, continuing..."
 done
 
