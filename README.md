@@ -1,7 +1,6 @@
-Evernote Backup
+Evernote Export
 ----------------
-It's for backuping your Evernote, obviously. 
-But can also be used for exporting it (for later import to a superior service).
+It's for exporting your Evernote notes, obviously. (for later import to a superior service)
 
 
 ## Quirks
